@@ -4,20 +4,20 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Main {
-    private static String PATH = "src/test/resources/";
-    private static final Logger logger = Logger.getLogger(Main.class.getName());
+public class Suffixing {
+    private static final Logger logger = Logger.getLogger(Suffixing.class.getName());
 
     public static void main(String[] args) {
         Properties properties = new Properties();
         try {
-            InputStream inputStream = new FileInputStream(PATH);
+            String pathToConfig = args[0];
+            InputStream inputStream = new FileInputStream(pathToConfig);
             properties.load(inputStream);
             String mode = properties.getProperty("mode");
             String suffix = properties.getProperty("suffix");
             String files = properties.getProperty("files");
             if (!Objects.equals(mode, "copy")) {
-                logger.log(Level.SEVERE, "Mode is not recognized:{} " + mode);
+                logger.log(Level.SEVERE, "Mode is not recognized: " + mode);
             }
             if (Objects.equals(suffix, null) || suffix.isBlank()) {
                 logger.log(Level.SEVERE, "No suffix is configured");
@@ -29,7 +29,7 @@ public class Main {
             for (String file : filesArray) {
                 File filename = new File(file);
                 if (!filename.exists()) {
-                    logger.log(Level.SEVERE, "No such file{} ", filename);
+                    logger.log(Level.SEVERE, "No such file ", filename);
                 } else {
                     int index = file.lastIndexOf(".");
                     String suffixedFile = file.substring(0, index) + "-" + file.substring(index);
@@ -43,4 +43,5 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
+
 }
